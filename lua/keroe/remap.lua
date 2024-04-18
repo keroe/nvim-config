@@ -14,6 +14,8 @@ vim.keymap.set("v", "<leader>y", "\"+y")
 
 vim.keymap.set("n", "<leader>cv>", ":!zathura %:r.pdf > /dev/null 2>&1 &<cr><cr>")
 
+vim.keymap.set("n", "<leader>zi", ":tab split<CR>", {})
+vim.keymap.set("n", "<leader>zo", ":tab close<CR>", {})
 
 
 
