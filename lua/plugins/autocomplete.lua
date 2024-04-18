@@ -17,13 +17,11 @@ return {
 		config = true,
 	},
 	{
-		"hrsh7th/cmp-nvim-lsp",
-	},
-	{
 		"L3MON4D3/LuaSnip",
 		dependencies = {
 			"saadparwaiz1/cmp_luasnip",
 			"rafamadriz/friendly-snippets",
+            'hrsh7th/cmp-nvim-lsp'
 		},
 	},
 	{
@@ -48,6 +46,26 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
+                    ["<Tab>"] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_next_item()
+                        elseif luasnip.expand_or_jumpable() then
+                            luasnip.expand_or_jump()
+                        else
+                            fallback()
+                        end
+                        end, {"i", "s"}),
+
+                    ["<S-Tab>"] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.select_prev_item()
+                        elseif luasnip.jumpable(-1) then
+                            luasnip.jump(-1)
+                        else
+                            fallback()
+                        end
+                        end, {"i", "s"}),
+
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
@@ -56,6 +74,10 @@ return {
 					{ name = "buffer" },
 				}),
 			})
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
+            require('lspconfig')['pyright'].setup {
+                capabilities = capabilities
+            }
 		end,
 	},
 }
