@@ -28,7 +28,10 @@ return {
             require('mason').setup()
             local mason_lspconfig = require 'mason-lspconfig'
             mason_lspconfig.setup {
-                ensure_installed = { "pyright" }
+                ensure_installed = {
+                    "pyright",
+                    "clangd",
+                    "lua_ls",}
             }
 			lspconfig.clangd.setup({
 				capabilities = capabilities,
