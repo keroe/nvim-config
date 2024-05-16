@@ -94,7 +94,7 @@ return {
         })
 
         vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
-        vim.keymap.set("n", "<leader>nb", ":Neotree filesystem reveal left<CR>", {})
+        vim.keymap.set("n", "<leader>nb", ":Neotree filesystem reveal right<CR>", {})
         vim.keymap.set("n", "<leader>nc", ":Neotree close<CR>", {})
         vim.keymap.set("n", "<leader>nf", ":Neotree buffers reveal float<CR>", {})
     end
