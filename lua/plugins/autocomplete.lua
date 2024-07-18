@@ -12,9 +12,31 @@ return {
             },
             opts = {
                 debug = true, -- Enable debugging
+
                 -- See Configuration section for rest
             },
-            -- See Commands section for default commands if you want to lazy load on them
+            config = function(_, opts)
+                local chat = require("CopilotChat")
+                local select = require("CopilotChat.select")
+                chat.setup(opts)
+                require("CopilotChat.integrations.cmp").setup()
+                vim.api.nvim_create_user_command("CopilotChatInline", function(args)
+                    chat.ask(args.args, {
+                        selection = select.visual,
+                        window = {
+                            layout = "float",
+                            relative = "cursor",
+                            width = 1,
+                            height = 0.4,
+                            row = 1,
+                        },
+                    })
+                end, { nargs = "*", range = true })
+
+            end,
+            keys = {
+                { "<leader>cc", "<cmd>CopilotChatInline<cr>", desc="CopilotChat - Inline chat"},
+            }
         },
     },
 	{
