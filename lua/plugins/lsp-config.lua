@@ -22,6 +22,9 @@ return {
             "williamboman/mason-lspconfig.nvim",
         },
         config = function()
+            local on_attach = function(client, bufnr)
+                vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
+            end
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             local lspconfig = require("lspconfig")
@@ -31,7 +34,9 @@ return {
                 ensure_installed = {
                     "pyright",
                     "clangd",
-                    "lua_ls",}
+                    "lua_ls",
+                    "ruff",
+                    "ruff_lsp" }
             }
             lspconfig.clangd.setup({
                 capabilities = capabilities,
@@ -48,6 +53,16 @@ return {
             lspconfig.pyright.setup({
                 capabilities = capabilities,
             })
+            lspconfig.ruff_lsp.setup({
+                on_attach = on_attach,
+                init_options = {
+                    settings = {
+                        -- Any extra CLI arguments for `ruff` go here.
+                        args = {},
+                    }
+                }
+            })
+
             -- Diagnostics
             vim.keymap.set("n", "<leader>cf", vim.diagnostic.open_float, { desc = "Open diagnostics float" })
             vim.keymap.set("n", "<leader>cn", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
