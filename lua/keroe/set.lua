@@ -21,6 +21,7 @@ vim.opt.isfname:append("@-@")
 
 vim.g.have_nerd_font = true
 vim.g.tmux_navigator_disable_when_zoomed = 1
+vim.g.tmux_navigator_save_on_switch = 1
 
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
