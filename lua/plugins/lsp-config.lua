@@ -67,7 +67,7 @@ return {
             vim.keymap.set("n", "<leader>cf", vim.diagnostic.open_float, { desc = "Open diagnostics float" })
             vim.keymap.set("n", "<leader>cn", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
             vim.keymap.set("n", "<leader>cN", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-            vim.keymap.set("n", "<leader>cl", vim.diagnostic.setloclist, { desc = "Show diagnstics list" })
+            vim.keymap.set("n", "<leader>cF", vim.diagnostic.setloclist, { desc = "Show diagnstics list" })
 
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover information" })
             vim.keymap.set("n", "<leader>cd", vim.lsp.buf.definition, { desc = "Go to definition" })
