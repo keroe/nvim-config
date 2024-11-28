@@ -69,6 +69,8 @@ return {
                         "node_modules",
                         "devel",
                         "logs",
+                        "log",
+                        "install",
                         "build",
                         "wandb",
                     },
