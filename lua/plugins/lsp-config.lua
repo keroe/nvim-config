@@ -36,7 +36,7 @@ return {
                     "clangd",
                     "lua_ls",
                     "ruff",
-                    "ruff_lsp" }
+                    }
             }
             lspconfig.clangd.setup({
                 capabilities = capabilities,
@@ -53,7 +53,7 @@ return {
             lspconfig.pyright.setup({
                 capabilities = capabilities,
             })
-            lspconfig.ruff_lsp.setup({
+            lspconfig.ruff.setup({
                 on_attach = on_attach,
                 init_options = {
                     settings = {
