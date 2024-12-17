@@ -5,15 +5,13 @@ return {
   opts = {
     term_colors = true,
     transparent_background = true,
-    dim_inactive = {
-      enabled = false, -- dims the background color of inactive window
-      shade = "dark",
-      percentage = 0.15, -- percentage of the shade to apply to the inactive window
+    styles = {
+        comments = {"bold"},
     },
     integrations = {
       cmp = true,
       gitsigns = true,
-      treesitter = true,
+      treesitter = false,
       harpoon = true,
       telescope = true,
       mason = true,
@@ -21,6 +19,8 @@ return {
       notify = true,
       which_key = true,
       fidget = true,
+      dap = true,
+      dap_ui = true,
       native_lsp = {
         enabled = true,
         virtual_text = {
