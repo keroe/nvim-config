@@ -40,6 +40,7 @@ return {
             }
             lspconfig.clangd.setup({
                 capabilities = capabilities,
+                cmd = { "clangd", "--background-index", "--clang-tidy", "--offset-encoding=utf-16" },
             })
             lspconfig.ts_ls.setup({
                 capabilities = capabilities,
@@ -49,6 +50,13 @@ return {
             })
             lspconfig.lua_ls.setup({
                 capabilities = capabilities,
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { "vim" },
+                        },
+                    },
+                },
             })
             lspconfig.pyright.setup({
                 capabilities = capabilities,
