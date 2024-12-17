@@ -5,7 +5,7 @@ return {
     {
         {
             "CopilotC-Nvim/CopilotChat.nvim",
-            branch = "canary",
+            branch = "main",
             dependencies = {
                 { "github/copilot.vim" }, -- or github/copilot.vim
                 { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
