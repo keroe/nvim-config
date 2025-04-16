@@ -22,10 +22,6 @@ return {
             "williamboman/mason-lspconfig.nvim",
         },
         config = function()
-            local on_attach = function(client, bufnr)
-                vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
-            end
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             local lspconfig = require("lspconfig")
             require('mason').setup()
@@ -38,38 +34,11 @@ return {
                     "ruff",
                     }
             }
-            lspconfig.clangd.setup({
-                capabilities = capabilities,
-                cmd = { "clangd", "--background-index", "--clang-tidy", "--offset-encoding=utf-16" },
-            })
-            lspconfig.ts_ls.setup({
-                capabilities = capabilities,
-            })
-            lspconfig.html.setup({
-                capabilities = capabilities,
-            })
-            lspconfig.lua_ls.setup({
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = { "vim" },
-                        },
-                    },
-                },
-            })
-            lspconfig.pyright.setup({
-                capabilities = capabilities,
-            })
-            lspconfig.ruff.setup({
-                on_attach = on_attach,
-                init_options = {
-                    settings = {
-                        -- Any extra CLI arguments for `ruff` go here.
-                        args = {},
-                    }
-                }
-            })
+            vim.lsp.enable('pyright')
+            vim.lsp.enable('clangd')
+            vim.lsp.enable('lua_ls')
+            vim.lsp.enable('ruff')
+
 
             -- Diagnostics
             vim.keymap.set("n", "<leader>cf", vim.diagnostic.open_float, { desc = "Open diagnostics float" })
@@ -77,7 +46,6 @@ return {
             vim.keymap.set("n", "<leader>cN", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
             vim.keymap.set("n", "<leader>cl", vim.diagnostic.setloclist, { desc = "Show diagnstics list" })
 
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover information" })
             vim.keymap.set("n", "<leader>cd", vim.lsp.buf.definition, { desc = "Go to definition" })
             vim.keymap.set("n", "<leader>cD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
             vim.keymap.set("n", "<leader>cl", vim.lsp.buf.references, { desc = "List all references" })
