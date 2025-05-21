@@ -37,3 +37,17 @@ vim.g.clipboard = {
     ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
   },
 }
+
+vim.g.vimtex_compiler_latexmk = {
+    aux_dir="aux",
+      options = {
+        "-pdf",
+        "-shell-escape",
+        "-verbose",
+        "-file-line-error",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+      }
+    }
+
+
