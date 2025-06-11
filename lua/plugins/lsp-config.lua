@@ -1,70 +1,104 @@
 return {
-<<<<<<< HEAD
-    "neovim/nvim-lspconfig",
+    "williamboman/mason-lspconfig.nvim",
     lazy = false,
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
+        "neovim/nvim-lspconfig",
         "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
         "jose-elias-alvarez/null-ls.nvim",
-        "nvim-lua/plenary.nvim",
         "ray-x/lsp_signature.nvim",
     },
     config = function()
-
         local servers = {
             "clangd",
             "lua_ls",
             "ruff",
             "jedi_language_server"
         }
-        local lspconfig = require("lspconfig")
         require('mason').setup()
         local mason_lspconfig = require 'mason-lspconfig'
         mason_lspconfig.setup {
             ensure_installed = servers,
+            automatic_enable = false
         }
 
-        local function on_attach(client, bufnr)
-            -- Set up buffer-local keymaps (vim.api.nvim_buf_set_keymap()), etc.
-            local opts = { noremap = true, silent = true }
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "v", "<C-k>", "<cmd>lua vim.lsp.buf.range_code_action()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>s", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>f", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "single" })<CR>', opts)
-            vim.api.nvim_buf_set_keymap(bufnr, "n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "single" })<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-            vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+        vim.api.nvim_create_autocmd('LspAttach', {
+            group = vim.api.nvim_create_augroup('my.lsp', {}),
+            callback = function(args)
+                local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+                local bufnr = args.buf
+                local opts = { noremap = true, silent = true }
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "v", "<C-k>", "<cmd>lua vim.lsp.buf.range_code_action()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+                -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>s", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+                -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+                -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>f", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "[d",
+                    '<cmd>lua vim.diagnostic.goto_prev({ border = "single" })<CR>', opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "]d",
+                    '<cmd>lua vim.diagnostic.goto_next({ border = "single" })<CR>', opts)
+                -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+                vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 
-            require 'lsp_signature'.on_attach({
-                bind = true,
-                floating_window_above_cur_line = true,
-                max_width = 120,
-                hi_parameter = 'Cursor',
-                hint_enable = false,
-                handler_opts = {
-                    border = 'single'
-                }
-            }, bufnr)
-        end
-
-        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-            border = "single",
-        })
-
-        vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-            border = "single",
+                require 'lsp_signature'.on_attach({
+                    bind = true,
+                    floating_window_above_cur_line = true,
+                    max_width = 120,
+                    hi_parameter = 'Cursor',
+                    hint_enable = false,
+                    handler_opts = {
+                        border = 'single'
+                    }
+                }, bufnr)
+                if client:supports_method('textDocument/implementation') then
+                    -- Create a keymap for vim.lsp.buf.implementation ...
+                end
+                -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+                if client:supports_method('textDocument/completion') then
+                    -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+                    -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+                    -- client.server_capabilities.completionProvider.triggerCharacters = chars
+                    vim.lsp.completion.enable(false, client.id, args.buf, { autotrigger = true })
+                end
+                -- Auto-format ("lint") on save.
+                -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+                if not client:supports_method('textDocument/willSaveWaitUntil')
+                    and client:supports_method('textDocument/formatting') then
+                    vim.api.nvim_create_autocmd('BufWritePre', {
+                        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+                        buffer = args.buf,
+                        callback = function()
+                            vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+                        end,
+                    })
+                end
+                if client:supports_method('textDocument/hover') then
+                    vim.api.nvim_create_autocmd('CursorHold', {
+                        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+                        buffer = args.buf,
+                        callback = function()
+                            require('hover').hover()
+                        end,
+                    })
+                end
+                if client:supports_method('textDocument/signatureHelp') then
+                    vim.api.nvim_create_autocmd('CursorHold', {
+                        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+                        buffer = args.buf,
+                        callback = function()
+                            vim.lsp.buf.signature_help()
+                        end,
+                    })
+                end
+            end,
         })
 
         vim.diagnostic.config({
-            virtual_text = false,
+            virtual_text = true,
             signs = true, --disable signs here to customly display them later
             update_in_insert = true,
             underline = true,
@@ -88,247 +122,16 @@ return {
                 -- end,
             }
         })
-        local capabilities = require'cmp_nvim_lsp'.default_capabilities(vim.lsp.protocol.make_client_capabilities())
-        local lspconfig = require('lspconfig')
-        local util = require('lspconfig/util')
+        vim.lsp.enable(servers)
 
-        for _, server in ipairs(servers) do
-            server = vim.tbl_get(lspconfig, server)
-            server.setup{
-                on_attach = on_attach,
-                capabilities = capabilities
-            }
-        end
-
-        require('mason-lspconfig').setup_handlers({
-            function(server)
-                lspconfig[server].setup({
-                    on_attach = on_attach,
-                    capabilities = capabilities
-                })
-            end,
-        })
         local null_ls = require 'null-ls'
         local sources = {
             null_ls.builtins.diagnostics.phpcs.with({
                 extra_args = { '--standard=psr12' },
                 diagnostics_format = "#{m}"
-=======
-    {
-
-        "williamboman/mason.nvim",
-
-        lazy = false,
-
-        config = function()
-            require("mason").setup()
-        end,
-
-    },
-
-    {
-
-        "williamboman/mason-lspconfig.nvim",
-
-        lazy = false,
-
-        opts = {
-
-            auto_install = true,
-
-        },
-
-    },
-    {
-        "neovim/nvim-lspconfig",
-        lazy = false,
-        dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "ray-x/lsp_signature.nvim",
-            "lewis6991/hover.nvim", -- Assuming 'require("hover")' refers to this or a similar plugin
-        },
-        config = function()
-            local lspconfig = require("lspconfig")
-            local mason_lspconfig = require('mason-lspconfig')
-            local cmp_nvim_lsp = require('cmp_nvim_lsp') -- For capabilities
-
-            -- Define capabilities
-            local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
-            -- If you are not using cmp-nvim-lsp directly for this, or prefer a simpler default:
-            -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-            local servers_to_ensure = {
-                "clangd",
-                "lua_ls",
-                "ruff",                -- Changed "ruff" to "ruff_lsp"
-                "jedi_language_server" -- Or "pyright" if you prefer
-            }
-
-            -- This ensures the servers are installed by Mason.
-            -- The `auto_install = true` in mason-lspconfig.nvim opts also handles this.
-            mason_lspconfig.setup {
-                ensure_installed = servers_to_ensure,
-            }
-
-            local function on_attach(client, bufnr)
-                local opts = { noremap = true, silent = true, buffer = bufnr }
-                vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-                vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-                vim.keymap.set("n", "K", "<cmd>lua require('hover').hover()<CR>", opts) -- Ensure 'hover' plugin is correctly set up
-                vim.keymap.set("n", "gK", "<cmd>lua require('hover').hover_select()<CR>", opts)
-                vim.keymap.set("n", "ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-                vim.keymap.set("v", "<C-k>", "<cmd>lua vim.lsp.buf.range_code_action()<CR>", opts)
-                vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-                vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-                vim.keymap.set("n", "[d", function() vim.diagnostic.goto_prev({ border = "single" }) end, opts)
-                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_next({ border = "single" }) end, opts)
-
-                -- Formatting command (consider using a dedicated formatting plugin like conform.nvim for more flexibility)
-                if client.supports_method("textDocument/formatting") then
-                    vim.keymap.set("n", "<leader>f", "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
-                    -- Autocmd for formatting on save
-                    vim.api.nvim_create_autocmd("BufWritePre", {
-                        group = vim.api.nvim_create_augroup("LspFormatting_" .. client.name, { clear = true }),
-                        buffer = bufnr,
-                        callback = function()
-                            vim.lsp.buf.format({ bufnr = bufnr, async = true })
-                        end,
-                    })
-                end
-
-                -- Attach lsp_signature
-                require('lsp_signature').on_attach({
-                    bind = true,
-                    floating_window_above_cur_line = true,
-                    max_width = 120,
-                    hi_parameter = 'Cursor',
-                    hint_enable = false,
-                    handler_opts = {
-                        border = 'single'
-                    }
-                }, bufnr)
-            end
-
-            -- Customize LSP handler borders
-            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-                border = "single",
->>>>>>> 71dd51e (better hover)
             })
         }
 
-<<<<<<< HEAD
         require 'null-ls'.setup({ sources = sources })
     end,
-=======
-            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-                border = "single",
-            })
-
-            -- Configure diagnostics
-            vim.diagnostic.config({
-                virtual_text = true,
-                signs = true,
-                update_in_insert = true,
-                underline = true,
-                severity_sort = true,
-                float = {
-                    focusable = false,
-                    style = "minimal",
-                    border = "single",
-                    source = "always",
-                    header = "Diagnostics:",
-                },
-                virtual_lines = false,
-            })
-
-            -- Setup servers using mason-lspconfig handlers (this is the correct way)
-            mason_lspconfig.setup_handlers({
-                function(server_name)
-                    local server_opts = {
-                        on_attach = on_attach,
-                        capabilities = capabilities,
-                    }
-
-                    -- Example of per-server custom options:
-                    if server_name == "lua_ls" then
-                        server_opts.settings = {
-                            Lua = {
-                                workspace = { checkThirdParty = false },
-                                telemetry = { enable = false },
-                                diagnostics = { globals = { "vim" } },
-                            }
-                        }
-                    elseif server_name == "clangd" then
-                        server_opts.cmd_env = {
-                            -- Example: If you need to set environment variables for clangd
-                            -- PATH = "/usr/local/opt/llvm/bin:" .. os.getenv("PATH"),
-                        }
-                        -- server_opts.filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" }
-                    end
-                    -- Add other server-specific configurations as needed
-
-                    lspconfig[server_name].setup(server_opts)
-                end,
-            })
-
-            -- null-ls setup (for linters/formatters not handled by LSPs or if you prefer null-ls)
-            local null_ls = require('null-ls')
-            local sources = {
-                null_ls.builtins.diagnostics.phpcs.with({
-                    extra_args = { '--standard=psr12' },
-                    diagnostics_format = "#{m}"
-                })
-                -- You can add other null-ls sources here, e.g., for Ruff if not using ruff_lsp:
-                -- null_ls.builtins.formatting.ruff,
-                -- null_ls.builtins.diagnostics.ruff,
-            }
-            null_ls.setup({
-                sources = sources,
-                on_attach = function(client, bufnr)
-                    if client.supports_method("textDocument/formatting") then
-                        vim.keymap.set("n", "<leader>f", function()
-                            vim.lsp.buf.format({ bufnr = bufnr, filter = function(c) return c.name == "null-ls" end })
-                        end, { buffer = bufnr, noremap = true, silent = true, desc = "Format with null-ls" })
-
-                        -- Format on save with null-ls if desired (be cautious if also formatting with LSP)
-                        -- vim.api.nvim_create_autocmd("BufWritePre", {
-                        --     group = vim.api.nvim_create_augroup("NullLsFormatting", { clear = true }),
-                        --     buffer = bufnr,
-                        --     callback = function()
-                        --         vim.lsp.buf.format({ bufnr = bufnr, filter = function(c) return c.name == "null-ls" end, async = true })
-                        --     end,
-                        -- })
-                    end
-                end,
-            })
-
-            -- Key mappings for scrolling cmp and hover windows
-            local cmp = require('cmp')
-            local hover = require('hover') -- Make sure you have this plugin, e.g., 'lewis6991/hover.nvim'
-            vim.keymap.set('n', '<C-f>', function()
-                if cmp.visible() then
-                    cmp.scroll_docs(4)
-                elseif hover.is_visible() then -- Check if hover window is visible
-                    hover.scroll(4)
-                else
-                    -- Fallback or other action if needed
-                    -- vim.cmd('normal! 4<C-f>') -- Example: normal page down
-                end
-            end, { noremap = true, silent = true })
-
-            vim.keymap.set('n', '<C-b>', function()
-                if cmp.visible() then
-                    cmp.scroll_docs(-4)
-                elseif hover.is_visible() then -- Check if hover window is visible
-                    hover.scroll(-4)
-                else
-                    -- Fallback or other action if needed
-                    -- vim.cmd('normal! 4<C-b>') -- Example: normal page up
-                end
-            end, { noremap = true, silent = true })
-        end,
-    }
->>>>>>> 71dd51e (better hover)
 }
