@@ -27,18 +27,42 @@ return {
         end,
     },
     {
-        {
-            "CopilotC-Nvim/CopilotChat.nvim",
-            dependencies = {
-                { "zbirenbaum/copilot.lua" },                   -- or zbirenbaum/copilot.lua
-                { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
-            },
-            build = "make tiktoken",                            -- Only on MacOS or Linux
-            opts = {
-                -- See Configuration section for options
-            },
-            -- See Commands section for default commands if you want to lazy load on them
+        "olimorris/codecompanion.nvim",
+        opts = {},
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
         },
+        config = function()
+            require("codecompanion").setup({
+                strategies = {
+                    chat = {
+                        adapter = "gemini",
+                    },
+                    inline = {
+                        adapter = "gemini",
+                    },
+                    cmd = {
+                        adapter = "gemini",
+                    }
+                },
+                adapters = {
+                    gemini = function()
+                        return require("codecompanion.adapters").extend("gemini", {
+                            env = {
+                                api_key = "cmd:cat ~/.config/codecompanion/gemini_token",
+                            },
+                            schema = {
+                                model = {
+                                    default = "gemini-2.0-flash",
+                                },
+                            }
+                        })
+                    end,
+                },
+            })
+            vim.keymap.set("n", "<leader>gc", "<cmd>CodeCompanion chat<CR>", { desc = "CodeCompanion Chat" })
+        end,
     },
     {
         "folke/which-key.nvim",
