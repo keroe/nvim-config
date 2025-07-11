@@ -49,5 +49,13 @@ return {
     config = function(_, opts)
         require("catppuccin").setup(opts)
         vim.cmd.colorscheme("catppuccin-mocha")
+        function LineNumberColors()
+            local palette = require('catppuccin.palettes').get_palette "mocha"
+            vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = palette.overlay1, bold = true })
+            vim.api.nvim_set_hl(0, 'LineNr', { fg = palette.maroon, bold = true })
+            vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = palette.overlay0, bold = true })
+        end
+
+        LineNumberColors()
     end,
 }
