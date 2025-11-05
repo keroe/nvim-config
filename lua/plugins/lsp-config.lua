@@ -35,7 +35,7 @@ return {
                 vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
                 -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>s", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
                 vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-                vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "gl", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
                 -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>f", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
                 vim.api.nvim_buf_set_keymap(bufnr, "n", "[d",
                     '<cmd>lua vim.diagnostic.goto_prev({ border = "single" })<CR>', opts)
@@ -76,20 +76,16 @@ return {
                         end,
                     })
                 end
-                if client:supports_method('textDocument/hover') then
-                    vim.api.nvim_create_autocmd('CursorHold', {
-                        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
-                        buffer = args.buf,
-                        callback = function()
-                            require('hover').hover()
-                        end,
-                    })
-                end
                 if client:supports_method('textDocument/signatureHelp') then
                     vim.api.nvim_create_autocmd('CursorHold', {
                         group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
                         buffer = args.buf,
                         callback = function()
+                            vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+                                vim.lsp.handlers.signature_help, {
+                                    border = 'rounded',
+                                    float_style = 'right_align'
+                                })
                             vim.lsp.buf.signature_help()
                         end,
                     })
