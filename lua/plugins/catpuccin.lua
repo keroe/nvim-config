@@ -8,6 +8,10 @@ return {
         styles = {
             comments = { "bold" },
         },
+        float = {
+            transparent = true,
+            solid = false
+        },
         integrations = {
             cmp = true,
             gitsigns = true,
