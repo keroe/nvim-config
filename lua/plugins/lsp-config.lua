@@ -9,6 +9,7 @@ return {
     },
     config = function()
         local servers = {
+            "copilot",
             "clangd",
             "lua_ls",
             "ruff",
