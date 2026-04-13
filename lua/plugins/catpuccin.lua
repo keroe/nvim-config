@@ -61,5 +61,10 @@ return {
         end
 
         LineNumberColors()
+
+        local palette = require('catppuccin.palettes').get_palette "mocha"
+        vim.api.nvim_set_hl(0, "CmpNormal", { bg = palette.mantle })
+        vim.api.nvim_set_hl(0, "CmpBorder", { fg = palette.blue, bg = palette.mantle })
+        vim.api.nvim_set_hl(0, "CmpSel", { bg = palette.surface0 })
     end,
 }
