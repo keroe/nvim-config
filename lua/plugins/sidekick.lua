@@ -1,8 +1,5 @@
 return {
     {
-        "https://github.com/folke/sidekick.nvim"
-    },
-    {
         "folke/sidekick.nvim",
         opts = {
             -- add any options here
@@ -32,48 +29,48 @@ return {
                 mode = { "n", "t", "i", "x" },
             },
             {
-                "<leader>aa",
+                "<leader>ba",
                 function() require("sidekick.cli").toggle() end,
                 desc = "Sidekick Toggle CLI",
             },
             {
-                "<leader>as",
+                "<leader>bs",
                 function() require("sidekick.cli").select() end,
                 -- Or to select only installed tools:
                 -- require("sidekick.cli").select({ filter = { installed = true } })
                 desc = "Select CLI",
             },
             {
-                "<leader>ad",
+                "<leader>bd",
                 function() require("sidekick.cli").close() end,
                 desc = "Detach a CLI Session",
             },
             {
-                "<leader>at",
+                "<leader>bt",
                 function() require("sidekick.cli").send({ msg = "{this}" }) end,
                 mode = { "x", "n" },
                 desc = "Send This",
             },
             {
-                "<leader>af",
+                "<leader>bf",
                 function() require("sidekick.cli").send({ msg = "{file}" }) end,
                 desc = "Send File",
             },
             {
-                "<leader>av",
+                "<leader>bv",
                 function() require("sidekick.cli").send({ msg = "{selection}" }) end,
                 mode = { "x" },
                 desc = "Send Visual Selection",
             },
             {
-                "<leader>ap",
+                "<leader>bp",
                 function() require("sidekick.cli").prompt() end,
                 mode = { "n", "x" },
                 desc = "Sidekick Select Prompt",
             },
             -- Example of a keybinding to open Claude directly
             {
-                "<leader>ac",
+                "<leader>bc",
                 function() require("sidekick.cli").toggle({ name = "claude", focus = true }) end,
                 desc = "Sidekick Toggle Claude",
             },
